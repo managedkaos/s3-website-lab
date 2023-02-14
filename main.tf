@@ -17,6 +17,12 @@ resource "aws_iam_user" "users" {
   name = random_pet.users[count.index].id
 }
 
+resource "aws_iam_user_login_profile" "users" {
+  count = var.user_count
+  user    = aws_iam_user.users[count.index].name
+  password_reset_required = false
+}
+
 resource "aws_s3_bucket" "buckets" {
   count = var.user_count
   bucket_prefix = "${aws_iam_user.users[count.index].name}-"
@@ -60,4 +66,8 @@ resource "aws_iam_user_policy_attachment" "attachment" {
   count = var.user_count
   user = aws_iam_user.users[count.index].name
   policy_arn = aws_iam_policy.policy[count.index].arn
+}
+
+output "user_names" {
+  value = ${zipmap(aws_iam_user.users[*].name, aws_iam_user_login_profile.users[*].encrypted_password)}
 }
