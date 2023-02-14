@@ -26,3 +26,38 @@ resource "aws_s3_bucket" "buckets" {
     Terraform = true
   }
 }
+
+resource "aws_iam_policy" "policy" {
+  count = var.user_count
+  name = aws_s3_bucket.buckets[count.index].id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "s3:*"
+        ],
+        Effect = "Allow",
+        Resource = [
+          aws_s3_bucket.buckets[count.index].arn,
+          "${aws_s3_bucket.buckets[count.index].arn}/*"
+        ]
+      },
+      {
+        Action = [
+          "s3:DeleteBucket"
+        ],
+        Effect = "Deny",
+        Resource = [
+          "arn:aws:s3:::*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "attachment" {
+  count = var.user_count
+  user = aws_iam_user.users[count.index].name
+  policy_arn = aws_iam_policy.policy[count.index].arn
+}
