@@ -69,5 +69,5 @@ resource "aws_iam_user_policy_attachment" "attachment" {
 }
 
 output "user_names" {
-  value = ${zipmap(aws_iam_user.users[*].name, aws_iam_user_login_profile.users[*].encrypted_password)}
+  value = zipmap([for u in aws_iam_user.users: u.name], [for p in aws_iam_user_login_profile.users: p.password])
 }
