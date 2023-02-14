@@ -26,6 +26,7 @@ resource "aws_iam_user_login_profile" "users" {
 resource "aws_s3_bucket" "buckets" {
   count = var.user_count
   bucket_prefix = "${aws_iam_user.users[count.index].name}-"
+  force_destroy = true
 
   tags = {
     User = aws_iam_user.users[count.index].name
