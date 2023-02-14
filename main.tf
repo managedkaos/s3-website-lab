@@ -57,6 +57,13 @@ resource "aws_iam_policy" "policy" {
         Resource = [
           "arn:aws:s3:::*"
         ]
+      },
+      {
+        Action= ["s3:ListAllMyBuckets"],
+        Effect = "Allow",
+        Resource: [
+          "*"
+        ]
       }
     ]
   })
