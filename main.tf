@@ -23,7 +23,9 @@ resource "random_pet" "users" {
 resource "aws_iam_user" "users" {
   count = var.user_count
   name  = random_pet.users[count.index].id
-  tags = local.tags
+  tags = merge(local.tags, {
+    yor_trace = "3892b865-2b54-4a3d-948a-0c97f01e5211"
+  })
 }
 
 resource "aws_iam_user_login_profile" "users" {
@@ -36,14 +38,18 @@ resource "aws_s3_bucket" "buckets" {
   count         = var.user_count
   bucket_prefix = "${aws_iam_user.users[count.index].name}-"
   force_destroy = true
-  tags = local.tags
+  tags = merge(local.tags, {
+    yor_trace = "befddf9f-0080-4b52-a288-b1346d584906"
+  })
 
 }
 
 resource "aws_iam_policy" "policy" {
   count = var.user_count
   name  = aws_s3_bucket.buckets[count.index].id
-  tags = local.tags
+  tags = merge(local.tags, {
+    yor_trace = "0f5133df-899d-4d6b-8207-acfa9328d25a"
+  })
 
   policy = jsonencode({
     Version = "2012-10-17",
