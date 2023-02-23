@@ -48,6 +48,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -68,6 +69,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: Run yor action
+      uses: bridgecrewio/yor-action@main
+      env:
+        LOG_LEVEL: DEBUG
+      with:
+        version: 0.3.0
+        directory: .
+        tag_groups: git,code2cloud
+        output_format: json
+          
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
