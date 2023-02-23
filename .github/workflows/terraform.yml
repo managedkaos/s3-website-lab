@@ -75,10 +75,10 @@ jobs:
         LOG_LEVEL: DEBUG
       with:
         version: 0.3.0
-        directory: .
         tag_groups: git,code2cloud
-        output_format: json
-          
+        output_format: cli
+        commit_changes: "YES"
+    
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
