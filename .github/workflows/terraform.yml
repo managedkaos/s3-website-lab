@@ -72,6 +72,7 @@ jobs:
     - name: Run yor
       uses: bridgecrewio/yor-action@main
       with:
+        tag_groups: git,code2cloud
         commit_changes: false
         
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
