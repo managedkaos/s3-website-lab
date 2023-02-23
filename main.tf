@@ -11,7 +11,7 @@ variable "user_count" {
 locals {
   tags = {
     Author = aws_caller_identity.id.arn
-    User = aws_iam_user.users[count.index].name
+    Project = 's3-website-lab'
     Terraform = true
   }
 }
