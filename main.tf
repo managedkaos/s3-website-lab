@@ -4,8 +4,16 @@ data "aws_caller_identity" "id" {}
 
 variable "user_count" {
   type = number
-  default = 50
+  default = 5
   description = "The number of user names to create"
+}
+
+locals {
+  tags = {
+    Author = aws_caller_identity.id.arn
+    User = aws_iam_user.users[count.index].name
+    Terraform = true
+  }
 }
 
 resource "random_pet" "users" {
@@ -15,6 +23,7 @@ resource "random_pet" "users" {
 resource "aws_iam_user" "users" {
   count = var.user_count
   name = random_pet.users[count.index].id
+  tags = local.tags
 }
 
 resource "aws_iam_user_login_profile" "users" {
@@ -27,16 +36,13 @@ resource "aws_s3_bucket" "buckets" {
   count = var.user_count
   bucket_prefix = "${aws_iam_user.users[count.index].name}-"
   force_destroy = true
-
-  tags = {
-    User = aws_iam_user.users[count.index].name
-    Terraform = true
-  }
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "policy" {
   count = var.user_count
   name = aws_s3_bucket.buckets[count.index].id
+  tags = local.tags
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -77,5 +83,5 @@ resource "aws_iam_user_policy_attachment" "attachment" {
 }
 
 output "user_names" {
-  value = zipmap([for u in aws_iam_user.users: u.name], [for p in aws_iam_user_login_profile.users: p.password])
+  value = [for u in aws_iam_user.users: u.name]
 }
