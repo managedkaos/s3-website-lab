@@ -69,7 +69,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Run yor action
+    - name: Run yor
       uses: bridgecrewio/yor-action@main
       with:
         commit_changes: false
@@ -89,3 +89,6 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Validate
       run: terraform validate
+      
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v4
