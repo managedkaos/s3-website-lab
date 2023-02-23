@@ -72,7 +72,7 @@ jobs:
     - name: Run yor
       uses: bridgecrewio/yor-action@main
       with:
-        directory: "${GITHUB_WORKSPACE}"
+        directory: ${{ env.GITHUB_WORKSPACE }}
         tags: git*,yor_trace
         tag_groups: git,code2cloud
         commit_changes: false
