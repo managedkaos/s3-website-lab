@@ -71,13 +71,6 @@ jobs:
 
     - name: Run yor action
       uses: bridgecrewio/yor-action@main
-      env:
-        LOG_LEVEL: DEBUG
-      with:
-        version: 0.3.0
-        tag_groups: git,code2cloud
-        output_format: cli
-        commit_changes: True
     
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
